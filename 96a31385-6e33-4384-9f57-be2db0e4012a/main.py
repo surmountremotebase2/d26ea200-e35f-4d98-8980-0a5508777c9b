@@ -64,7 +64,7 @@ class TradingStrategy(Strategy):
                             rsi_BSV = RSI("BSV", data["ohlcv"], 10)[-1]
                             if rsi_SQQQ > rsi_BSV:
                                 allocation_dict["SQQQ"] = 1.0
-                            else
+                            else:
                                 allocation_dict["BSV"] = 1.0
 
 
