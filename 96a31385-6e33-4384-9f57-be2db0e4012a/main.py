@@ -27,7 +27,10 @@ class TradingStrategy(Strategy):
         
         # Get the current prices and calculate the moving averages
         current_price_SPY = data["ohlcv"][-1]["SPY"]["close"]
+        current_price_TQQQ = data["ohlcv"][-1]["TQQQ"]["close"]
+
         moving_average_SPY_200 = SMA("SPY", data["ohlcv"], 200)[-1]
+        ma_TQQQ_20 = SMA("TQQQ", data["ohlcv"], 20)[-1]
         
         # Determine the conditions for selecting TQQQ or alternative ETFs
         if current_price_SPY > moving_average_SPY_200:
@@ -50,12 +53,15 @@ class TradingStrategy(Strategy):
                     allocation_dict["SPXL"] = 1.0
                 else:
                     rsi_UVXY = RSI("UVXY", data["ohlcv"], 10)[-1]
-                    if rsi_UVXY > 74:
+                    if rsi_UVXY > 74 and rsi_UVXY <= 84:
                         allocation_dict["UVXY"] = 1.0
                     else:
                         # Simplified decision for else condition
-                        allocation_dict["TQQQ"] = 1.0
-        
+                        if current_price_TQQQ > ma_TQQQ_20:
+                            allocation_dict["TQQQ"] = 1.0
+                        else:
+
+
         # Ensure only one allocation is selected for simplicity and compliance
         selected_asset = max(allocation_dict, key=allocation_dict.get)
         for ticker in self.tickers:
