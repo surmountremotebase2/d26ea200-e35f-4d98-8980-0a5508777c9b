@@ -31,10 +31,11 @@ class TradingStrategy(Strategy):
 
         moving_average_SPY_200 = SMA("SPY", data["ohlcv"], 200)[-1]
         ma_TQQQ_20 = SMA("TQQQ", data["ohlcv"], 20)[-1]
+
+        rsi_TQQQ = RSI("TQQQ", data["ohlcv"], 10)[-1]
         
         # Determine the conditions for selecting TQQQ or alternative ETFs
         if current_price_SPY > moving_average_SPY_200:
-            rsi_TQQQ = RSI("TQQQ", data["ohlcv"], 10)[-1]
             if rsi_TQQQ > 79:
                 allocation_dict["UVXY"] = 1.0
             else:
@@ -44,7 +45,6 @@ class TradingStrategy(Strategy):
                 else:
                     allocation_dict["TQQQ"] = 1.0
         else:
-            rsi_TQQQ = RSI("TQQQ", data["ohlcv"], 10)[-1]
             if rsi_TQQQ < 31:
                 allocation_dict["TECL"] = 1.0
             else:
