@@ -60,11 +60,14 @@ class TradingStrategy(Strategy):
                         if current_price_TQQQ > ma_TQQQ_20:
                             allocation_dict["TQQQ"] = 1.0
                         else:
+                            rsi_SQQQ = RSI("SQQQ", data["ohlcv"], 10)[-1]
+                            rsi_BSV = RSI("BSV", data["ohlcv"], 10)[-1]
+                            if rsi_SQQQ > rsi_BSV:
+                                allocation_dict["SQQQ"] = 1.0
+                            else
+                                allocation_dict["BSV"] = 1.0
 
 
-        # Ensure only one allocation is selected for simplicity and compliance
-        selected_asset = max(allocation_dict, key=allocation_dict.get)
-        for ticker in self.tickers:
-            allocation_dict[ticker] = 1.0 if ticker == selected_asset else 0.0
+        
         
         return TargetAllocation(allocation_dict)
