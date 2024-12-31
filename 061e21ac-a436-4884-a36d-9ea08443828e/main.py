@@ -31,16 +31,15 @@ class TradingStrategy(Strategy):
         
         # Check the conditions mentioned in the strategy
         if rsi_bil and rsi_ibtk and rsi_spy:
+        if len(rsi_sbnd) > 0 and len(rsi_hibl) > 0:
             # Compare RSIs according to the given logic
             if rsi_bil[-1] < rsi_ibtk[-1]:
                 if rsi_spy[-1] > 75:
                     allocation_dict["SHY"] = 1.0  # Allocate to SHY if SPY's RSI is above 75
                 else:
-                    allocation_dict["SOXL"] = 1.0  # Else, allocate to SOXL
-            else:
-                if len(rsi_sbnd) > 0 and len(rsi_hibl) > 0:
+                    allocation_dict["SOXL"] = 1.0  # Else, allocate to SOXL   
             # Check if the last RSI value of SBND is less than the last RSI value of HIBL
-            if rsi_sbnd[-1] < rsi_hibl[-1]:
+            elif rsi_sbnd[-1] < rsi_hibl[-1]:
                 # If true, find the ticker with the lowest 7-days RSI between SOXS and SQQQ
                 rsi_soxs = RSI("SOXS", data["ohlcv"], length=7)[-1]
                 rsi_sqqq = RSI("SQQQ", data["ohlcv"], length=7)[-1]
